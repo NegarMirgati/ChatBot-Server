@@ -1,0 +1,106 @@
+body {
+    font-family: Garamond;
+    background-color: #ddd; 
+    height: 600px;
+}
+
+h1 {
+    color: black;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: center;
+    font-size: 40px;
+    font-style: oblique;
+}
+
+h3 {
+    color: black;
+    font-size: 20px;
+    margin-top: 3px;
+    text-align: center;
+}
+
+#chatbox {
+    margin-left: auto;
+    margin-right: 5px;
+    width: 100%;
+    margin-top: 60px;
+    background-color: #ddd;
+}
+
+#userInput {
+    margin-left: auto;
+    margin-right: 60px;
+    width: 100%;
+    margin-top: 60px;
+}
+
+#textInput {
+    width: 200px;
+    border: none;
+    border-bottom: 3px solid #009688;
+    font-family: monospace;
+    font-size: 17px;
+}
+
+#buttonInput {
+    float: right;
+    padding: 3px;
+    font-family: monospace;
+    font-size: 25px;
+    color: white;
+    background-color: royalblue;
+}
+
+.userText {
+    color: white;
+    font-family: monospace;
+    font-size: 17px;
+    text-align: right;
+    line-height: 30px;
+}
+
+.userText span {
+    background-color: #009688;
+    padding: 10px;
+    border-radius: 2px;
+}
+
+.botText {
+    color: white;
+    font-family: monospace;
+    font-size: 17px;
+    text-align: left;
+    line-height: 30px;
+}
+
+.botText span {
+    background-color: #EF5350;
+    padding: 10px;
+    border-radius: 2px;
+}
+
+#tidbit {
+    position:absolute;
+    bottom:0;
+    right:0;
+    width: 100%;
+}
+
+.container img {
+    float: left;
+    max-width: 50px;
+    width: 100%;
+    margin-right: 5px;
+    border-radius: 50%;
+    background-color: #ddd;
+    
+  }
+  .container img.right {
+    float: right;
+    margin-left: 5px;
+    margin-right:0;
+  }
+  #myframe{
+      background-color: #ddd;
+  }

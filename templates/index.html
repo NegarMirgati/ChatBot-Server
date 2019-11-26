@@ -1,0 +1,109 @@
+<html lang="en">
+  <head>
+    <title>chatbot</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="/static/FarsiType.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- Begin emoji-picker JavaScript -->
+    <script src="/static/config.js"></script>
+    <script src="/static/util.js"></script>
+    <script src="/static/jquery.emojiarea.js"></script>
+    <script src="/static/emoji-picker.js"></script>
+    <!-- End emoji-picker JavaScript -->
+    <!-- Begin emoji-picker Stylesheets -->
+    <link rel="stylesheet" href="/static/emoji.css" >
+  </head>
+  <body style="background-color: #dddd;">
+    
+    <div id="myframe">
+      <div class="container" style="background-color: rgba(177, 114, 43, 0.247); margin: 5px; height: 50px;">
+        <h1 style="font-style:inherit">ChatBot</h1>         
+            <script> 
+            console.log("Oops");
+            </script> 
+           
+      </div>
+      <div id="chatbox" class="container">
+          <img src="/static/chatbot.jpg" alt="chatbot" style="width:100%;">
+        <p class="botText"><span>سلام من چت بات هستم.بفرمایید</span></p>
+      </div>
+      <div class="panel-footer">
+      <div id="userInput" class="container" >
+          <p class="lead emoji-picker-container ">
+            <input  id="textInput" type="email" Lang="fa-IR" name="msg" class="emoji-wysiwyg-editor" placeholder="‍‍‍‍‍پیام خود را بنوسید" data-emojiable="true">
+            <span class="input-group-btn">
+            <button id="buttonInput" class="btn btn-primary btn-sm"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
+            </span> 
+         </p>
+
+        <script>
+          $('.emoji-wysiwyg-editor').html('');
+        </script>
+      </div>
+      </div>
+    
+    <script>
+      $(function() {
+        // Initializes and creates emoji set from sprite sheet
+        window.emojiPicker = new EmojiPicker({
+          emojiable_selector: '[data-emojiable=true]',
+          assetsPath: '/static',
+          popupButtonClasses: 'fa fa-smile-o'
+        });
+        // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+        // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+        // It can be called as many times as necessary; previously converted input fields will not be converted again
+        window.emojiPicker.discover();
+      });
+    </script>
+
+      <script>
+        var global="/static/f1.png"
+        function getBotResponse() {
+          var rawText = $("#textInput").val();          
+          var userHtml = '<img id = avatar src="/static/f1.png" alt="student" class="right" style="width:100%;"> <p class="userText"><span>' + rawText + '</span></p>';
+          $("#textInput").val("");
+          $("#chatbox").append(userHtml);
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          //document.getElementById('avatar').src=file_get_contents("/static/info2.txt")
+         
+
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var str = data;
+            var n = str.search("#");
+            var res = str.substring(n+1, str.length);
+            data = str.substring(0, n);
+            // console.log(res);
+            var botHtml = '<img src="/static/chatbot.jpg" alt="chatbot" style="width:100%;"> <p class="botText"><span>' + data + '</span></p>';
+            $("#chatbox").append(botHtml);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          });
+        }
+       
+        
+        $("#textInput").keypress(function chatKeyPressed(e){
+          $('.emoji-wysiwyg-editor').html('');
+            if(e.which == 13) {
+                // readText();
+                getBotResponse();
+                $('.emoji-wysiwyg-editor').html('');
+            }
+        });
+        $("#buttonInput").click(function(){
+          getBotResponse();
+          $('.emoji-wysiwyg-editor').html('');
+        })
+        
+      </script>
+    </div>
+  </body>
+</html>
