@@ -1,16 +1,31 @@
+@import "Fonts/vazir.css"; 
 body {
-    font-family: Garamond;
-    background-color: #ddd; 
+    font-family: Vazir; 
     height: 600px;
 }
 
-h1 {
-    color: black;
+#chat-container{
+    padding-right : 0px;
+    padding-left : 0px;
+}
+
+#header-fixed{
+    height: 50px;
+    padding: 0px;
+    position: fixed;
+    top: 0;
+    width : 100%;
+}
+
+#title{
+    color: white;
     margin-bottom: 0;
     margin-top: 0;
     text-align: center;
     font-size: 40px;
     font-style: oblique;
+    background-color: rgb(39, 104, 153);
+    width : 100%;
 }
 
 h3 {
@@ -25,59 +40,70 @@ h3 {
     margin-right: 5px;
     width: 100%;
     margin-top: 60px;
-    background-color: #ddd;
+    background-color: rgb(194, 227, 224);
 }
 
 #userInput {
     margin-left: auto;
     margin-right: 60px;
     width: 100%;
-    margin-top: 60px;
+    margin-top: 15px;
 }
 
 #textInput {
     width: 200px;
     border: none;
     border-bottom: 3px solid #009688;
-    font-family: monospace;
+    font-family: Vazir;
     font-size: 17px;
 }
 
-#buttonInput {
+#buttonInput{
     float: right;
     padding: 3px;
-    font-family: monospace;
+    font-family: Vazir;
     font-size: 25px;
     color: white;
-    background-color: royalblue;
+    background-color: rgb(28, 121, 206);
+    border-radius: 10px;
 }
 
+#buttonInput:hover{
+    background-color: rgb(25, 109, 186);
+}
+
+
 .userText {
-    color: white;
-    font-family: monospace;
-    font-size: 17px;
+    color: black;
+    font-family: Vazir;
+    font-size: 13px;
     text-align: right;
-    line-height: 30px;
+    line-height: 43px;
+    width : 110%;
+    border-radius: 12px;
 }
 
 .userText span {
-    background-color: #009688;
+    background-color: rgb(239, 253, 222);
     padding: 10px;
-    border-radius: 2px;
+    border-radius: 12px;
 }
 
 .botText {
-    color: white;
-    font-family: monospace;
-    font-size: 17px;
+    color: black;
+    font-family: Vazir;
+    font-size: 13px;
     text-align: left;
-    line-height: 30px;
+    line-height: 43px;
+    border-radius: 12px;
+    width : 110%;
 }
 
 .botText span {
-    background-color: #EF5350;
+    background-color: rgb(255, 255, 255);
     padding: 10px;
-    border-radius: 2px;
+    border-radius: 12px;
+
 }
 
 #tidbit {
@@ -102,5 +128,12 @@ h3 {
     margin-right:0;
   }
   #myframe{
-      background-color: #ddd;
+      background-color: rgb(194, 227, 224);
+      font-family: Vazir;
+  }
+
+  .emoji-wysiwyg-editor{
+    background-color: white;
+    border-radius: 10px;
+    font-family: Vazir;
   }

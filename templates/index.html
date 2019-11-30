@@ -13,24 +13,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <script src="/static/FarsiType.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- Begin emoji-picker Stylesheets -->
+    <link rel="stylesheet" href="/static/emoji.css" >
+  </head>
+  <body style="background-color: rgb(194, 227, 224);">
     <!-- Begin emoji-picker JavaScript -->
     <script src="/static/config.js"></script>
     <script src="/static/util.js"></script>
     <script src="/static/jquery.emojiarea.js"></script>
     <script src="/static/emoji-picker.js"></script>
     <!-- End emoji-picker JavaScript -->
-    <!-- Begin emoji-picker Stylesheets -->
-    <link rel="stylesheet" href="/static/emoji.css" >
-  </head>
-  <body style="background-color: #dddd;">
     
     <div id="myframe">
-      <div class="container" style="background-color: rgba(177, 114, 43, 0.247); margin: 5px; height: 50px;">
-        <h1 style="font-style:inherit">ChatBot</h1>         
-            <script> 
-            console.log("Oops");
-            </script> 
-           
+      <div class="container" id = "header-fixed">
+        <h1 id = "title">چت بات</h1>                    
       </div>
       <div id="chatbox" class="container">
           <img src="/static/chatbot.jpg" alt="chatbot" style="width:100%;">
@@ -39,7 +35,7 @@
       <div class="panel-footer">
       <div id="userInput" class="container" >
           <p class="lead emoji-picker-container ">
-            <input  id="textInput" type="email" Lang="fa-IR" name="msg" class="emoji-wysiwyg-editor" placeholder="‍‍‍‍‍پیام خود را بنوسید" data-emojiable="true">
+            <input  id="textInput" type="email" Lang="fa-IR" name="msg" class="emoji-wysiwyg-editor" placeholder="‍‍‍‍‍پیام خود را بنویسید" data-emojiable="true">
             <span class="input-group-btn">
             <button id="buttonInput" class="btn btn-primary btn-sm"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
             </span> 
