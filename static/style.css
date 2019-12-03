@@ -1,7 +1,13 @@
 @import "Fonts/vazir.css"; 
+
+html {
+    overflow : hidden;
+}
+
 body {
     font-family: Vazir; 
     height: 600px;
+    width : 100%;
 }
 
 #chat-container{
@@ -9,13 +15,24 @@ body {
     padding-left : 0px;
 }
 
-#header-fixed{
+#header{
     height: 50px;
     padding: 0px;
     position: fixed;
     top: 0;
     width : 100%;
     z-index: 100;
+	left:0;
+}
+
+#footer{
+    position:fixed;
+	width:100%;
+	left:0;
+    top:0;
+    height : 100px;
+    bottom:0;
+	top:auto;
 }
 
 #title{
@@ -27,6 +44,7 @@ body {
     font-style: oblique;
     background-color: rgb(39, 104, 153);
     width : 100%;
+    padding-bottom: 5px;
 }
 
 h3 {
@@ -38,10 +56,13 @@ h3 {
 
 #chatbox {
     margin-left: auto;
-    margin-right: 5px;
     width: 100%;
-    margin-top: 60px;
     background-color: rgb(194, 227, 224);
+    position:absolute;
+	top:50px;
+	bottom:100px;
+    overflow:auto;
+    padding : 20px;
 }
 
 #userInput {
@@ -98,7 +119,25 @@ h3 {
     line-height: 43px;
     border-radius: 12px;
     width : 110%;
+    margin-top: 8px;
 }
+
+#bot-avatar{
+    width: 20%;
+    border-radius: 30px;
+    float: left;
+    padding: 6px;
+    margin-left: -20px;
+}
+
+#user-avatar{
+    border-radius: 30px;
+    width: 20%;
+    float: right;
+    padding : 6px;
+    margin-right: -20px;
+}
+
 
 .botText span {
     background-color: rgb(255, 255, 255);
@@ -131,8 +170,9 @@ h3 {
   #myframe{
       background-color: rgb(194, 227, 224);
       font-family: Vazir;
+      width : 100%;
   }
-
+  
   .emoji-wysiwyg-editor{
     background-color: white;
     border-radius: 10px;

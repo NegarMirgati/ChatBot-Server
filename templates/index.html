@@ -22,22 +22,21 @@
     <script src="/static/util.js"></script>
     <script src="/static/jquery.emojiarea.js"></script>
     <script src="/static/emoji-picker.js"></script>
-    <!-- End emoji-picker JavaScript -->
-    
-    <div id="myframe">
-      <div class="container" id = "header-fixed">
-        <h1 id = "title">چت بات</h1>                    
-      </div>
-      <div id="chatbox" class="container">
-          <img src="/static/chatbot.jpg" alt="chatbot" style="width:100%;">
-        <p class="botText"><span>سلام من چت بات هستم.بفرمایید</span></p>
-      </div>
-      <div class="panel-footer">
-      <div id="userInput" class="container" >
+    <!-- End emoji-picker JavaScript -->    
+<div id = "myframe">
+    <div id="header">
+      <h1 id = "title">چت بات</h1>         
+  </div>
+  <div id="chatbox">
+      <img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar">
+      <p class="botText"><span>سلام من چت بات هستم.بفرمایید</span></p>
+  </div>
+  <div id="footer">
+      <div id="userInput" class="container">
           <p class="lead emoji-picker-container ">
             <input  id="textInput" type="email" Lang="fa-IR" name="msg" class="emoji-wysiwyg-editor" placeholder="‍‍‍‍‍پیام خود را بنویسید" data-emojiable="true">
             <span class="input-group-btn">
-            <button id="buttonInput" class="btn btn-primary btn-sm"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
+              <button id="buttonInput" class="btn btn-primary btn-sm"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
             </span> 
          </p>
 
@@ -45,8 +44,8 @@
           $('.emoji-wysiwyg-editor').html('');
         </script>
       </div>
-      </div>
-    
+  </div>
+
     <script>
       $(function() {
         // Initializes and creates emoji set from sprite sheet
@@ -66,7 +65,7 @@
         var global="/static/f1.png"
         function getBotResponse() {
           var rawText = $("#textInput").val();          
-          var userHtml = '<img id = avatar src="/static/f1.png" alt="student" class="right" style="width:100%;"> <p class="userText"><span>' + rawText + '</span></p>';
+          var userHtml = '<img src="/static/f1.png" alt="student" class="right" id = "user-avatar"> <p class="userText"><span>' + rawText + '</span></p>';
           $("#textInput").val("");
           $("#chatbox").append(userHtml);
           document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
@@ -79,7 +78,7 @@
             var res = str.substring(n+1, str.length);
             data = str.substring(0, n);
             // console.log(res);
-            var botHtml = '<img src="/static/chatbot.jpg" alt="chatbot" style="width:100%;"> <p class="botText"><span>' + data + '</span></p>';
+            var botHtml = '<img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar"> <p class="botText"><span>' + data + '</span></p>';
             $("#chatbox").append(botHtml);
             document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
           });
@@ -101,5 +100,6 @@
         
       </script>
     </div>
+  </div>
   </body>
 </html>
