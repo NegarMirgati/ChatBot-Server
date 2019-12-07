@@ -1,99 +1,120 @@
-<html lang="en">
-  <head>
-    <title>chatbot</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <script src="/static/FarsiType.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <!-- Begin emoji-picker Stylesheets -->
-    <link rel="stylesheet" href="/static/emoji.css" >
-  </head>
-  <body style="background-color: rgb(194, 227, 224);">
-    <!-- Begin emoji-picker JavaScript -->
-    <script src="/static/config.js"></script>
-    <script src="/static/util.js"></script>
-    <script src="/static/jquery.emojiarea.js"></script>
-    <script src="/static/emoji-picker.js"></script>
-    <!-- End emoji-picker JavaScript -->    
-<div id = "myframe">
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+  <script src="/static/FarsiType.js"></script>
+  <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Open+Sans:400,700'>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="/static/emojionearea-master/emojionearea-master/dist/emojionearea.min.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="http://mervick.github.io/lib/google-code-prettify/skins/tomorrow.css" media="screen">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="http://mervick.github.io/lib/google-code-prettify/prettify.js"></script>
+  <script type="text/javascript" src="/static/emojionearea-master/emojionearea-master/dist/emojionearea.min.js"></script>
+</head>
+
+<body style="background-color: rgb(194, 227, 224);">
+  <div id = "myframe">
     <div id="header">
       <h1 id = "title">چت بات</h1>         
-  </div>
-  <div id="chatbox">
-    <img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar"> <div class=" botText talk-bubble tri-right round left-in" style = "background-color : white;"> <div class="talktext"><p class = "botText">سلام من چت بات هستم. بفرمایید</p></div></div>
-  </div>
-  <div id="footer">
+    </div>
+    <div id="chatbox">
+      <div class = "row">
+        <div class = "col-xs-3 col-chat">
+          <img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar">
+        </div>
+        <div class = "col-xs-9 col-chat">
+            <div class=" botText talk-bubble-bot tri-right round left-in" style = "background-color : white;"> 
+              <div class="talktext">
+                <p class = "botText">سلام من چت بات هستم. بفرمایید</p>
+              </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="footer">
       <div id="userInput" class="container">
-          <p class="lead emoji-picker-container ">
-            <input  id="textInput" type="email" Lang="fa-IR" name="msg" class="emoji-wysiwyg-editor" placeholder="‍‍‍‍‍پیام خود را بنویسید" data-emojiable="true">
-            <span class="input-group-btn">
-              <button id="buttonInput" class="btn btn-primary btn-sm"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
-            </span> 
-         </p>
+        <div class="clearfix">
+            <div class="row">
+              <div class="col-6">
+                    <input id="textInput" type = "text" name="msg" placeholder="‍‍‍‍‍...پیام خود را بنویسید"/>
+              </div>
+              <div class="col-6">
+                <div id="emoji-container"></div>
+              </div>
+            </div>
+            <div class = "row">
+              <div class = "col">
+              <span class="input-group-btn">
+                <button id="buttonInput" class="btn btn-primary btn-sm"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>      
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $("#textInput").emojioneArea({
+                container: "#emoji-container",
+                hideSource: true,
+                useSprite: false
+              });
+            });
+          </script>
+          <script>
+              var input = document.getElementById("textInput");
+              input.addEventListener("keyup", function(event) {
+                console.log('here')
+                if (event.keyCode === 13) {
+                 event.preventDefault();
+                 document.getElementById("buttonInput").click();
+                }
+              });
+          </script>
+              
+    </div>
+</div>
 
-        <script>
-          $('.emoji-wysiwyg-editor').html('');
-        </script>
-      </div>
-  </div>
 
     <script>
-      $(function() {
-        // Initializes and creates emoji set from sprite sheet
-        window.emojiPicker = new EmojiPicker({
-          emojiable_selector: '[data-emojiable=true]',
-          assetsPath: '/static',
-          popupButtonClasses: 'fa fa-smile-o'
-        });
-        // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
-        // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
-        // It can be called as many times as necessary; previously converted input fields will not be converted again
-        window.emojiPicker.discover();
-      });
-    </script>
-
-      <script>
-   function getBotResponse() {
-          var rawText = $("#textInput").val();          
-          var userHtml = '<img src="/static/f1.png" alt="student" class="right" id = "user-avatar"> <div class="talk-bubble tri-right round right-in"> <div class="talktext"> <p class = "userText">' +  rawText + '</p> </div> </div>' ;
-          $("#textInput").val("");
-          $("#chatbox").append(userHtml);
-          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
-         
-          $.get("/get", { msg: rawText }).done(function(data) {
-            var str = data;
-            var n = str.search("#");
-            var res = str.substring(n+1, str.length);
-            data = str.substring(0, n);
-            var botHtml = '<img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar"> <div class="talk-bubble tri-right round left-in" style = "background-color : white;"> <div class="talktext"><p class = "botText">' + data + '</p></div></div>';
-            $("#chatbox").append(botHtml);
-            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
-          });
-        }
+        function getBotResponse() {
+        var rawText = $("#textInput").val();          
+        var userHtml = '<div class = "row"><div class = "col-xs-9 col-chat"> <div class="talk-bubble-user tri-right round right-in"> <div class="talktext"> <p class = "userText">' +  rawText + '</p></div></div></div><div class = "col-xs-3 col-chat text-right"> <img src="/static/f1.png" alt="student" class="right" id = "user-avatar"></div></div>' ;
+        $("#chatbox").append(userHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
        
-        
-        $("#textInput").keypress(function chatKeyPressed(e){
-          $('.emoji-wysiwyg-editor').html('');
-            if(e.which == 13) {
-                getBotResponse();
-                $('.emoji-wysiwyg-editor').html('');
-            }
+        $.get("/get", { msg: rawText }).done(function(data) {
+          var str = data;
+          var n = str.search("#");
+          var res = str.substring(n+1, str.length);
+          data = str.substring(0, n);
+          var botHtml = '<div class="row"><div class = "col-xs-3 col-chat"> <img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar"></div> <div class = "col-xs-9 col-chat"> <div class="talk-bubble-bot tri-right round left-in" style = "background-color : white;"> <div class="talktext"><p class = "botText">' + data + '</p></div></div></div></div>';
+          $("#chatbox").append(botHtml);
+          $("div.emojionearea-editor").data("emojioneArea").setText('');
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
         });
-        $("#buttonInput").click(function(){
-          getBotResponse();
-          $('.emoji-wysiwyg-editor').html('');
-        })
-        
-      </script>
-    </div>
+      }
+     
+      
+      $("#textInput").keypress(function chatKeyPressed(e){
+        $('.emoji-wysiwyg-editor').html('');
+          if(e.which == 13) {
+              getBotResponse();
+          }
+      });
+      $("#buttonInput").click(function(){
+        getBotResponse();
+      })
+      
+    </script>
   </div>
-  </body>
+</div>
+</body>
+</html>
+
+
 </html>
