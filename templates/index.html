@@ -50,7 +50,7 @@
             <div class = "row">
               <div class = "col">
               <span class="input-group-btn">
-                <button id="buttonInput" class="btn btn-primary btn-sm"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
+                <button id="buttonInput" class="btn btn-primary btn-sm" onclick="getBotResponse()"><i class="fa fa-send fa-1x" aria-hidden="true"></i></button>
               </span>
             </div>
           </div>
@@ -61,28 +61,25 @@
               $("#textInput").emojioneArea({
                 container: "#emoji-container",
                 hideSource: true,
-                useSprite: false
-              });
-            });
-          </script>
-          <script>
-              var input = document.getElementById("textInput");
-              input.addEventListener("keyup", function(event) {
-                console.log('here')
-                if (event.keyCode === 13) {
-                 event.preventDefault();
-                 document.getElementById("buttonInput").click();
+                useSprite: false,
+                events: {
+                keyup: function(editor, event) {
+                  if (event.which == 13) {
+                    $("#buttonInput").click();  
+                  }
                 }
-              });
-          </script>
-              
+              }
+            });
+          });
+        </script>              
     </div>
 </div>
 
 
     <script>
         function getBotResponse() {
-        var rawText = $("#textInput").val();          
+
+        var rawText =  $('#textInput').data("emojioneArea").getText().trim();          
         var userHtml = '<div class = "row"><div class = "col-xs-9 col-chat"> <div class="talk-bubble-user tri-right round right-in"> <div class="talktext"> <p class = "userText">' +  rawText + '</p></div></div></div><div class = "col-xs-3 col-chat text-right"> <img src="/static/f1.png" alt="student" class="right" id = "user-avatar"></div></div>' ;
         $("#chatbox").append(userHtml);
         document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
@@ -97,19 +94,7 @@
           $("div.emojionearea-editor").data("emojioneArea").setText('');
           document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
         });
-      }
-     
-      
-      $("#textInput").keypress(function chatKeyPressed(e){
-        $('.emoji-wysiwyg-editor').html('');
-          if(e.which == 13) {
-              getBotResponse();
-          }
-      });
-      $("#buttonInput").click(function(){
-        getBotResponse();
-      })
-      
+      } 
     </script>
   </div>
 </div>
