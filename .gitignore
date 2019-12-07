@@ -166,4 +166,7 @@ GitHub.sublime-settings
 # Ignore all local history of files
 .history
 
+## custome ###
+*.sqlite3
+
 # End of https://www.gitignore.io/api/linux,python,sublimetext,visualstudiocode

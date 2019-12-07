@@ -15,8 +15,8 @@ def process():
     trainer = ListTrainer(chatbot)
     trainer_corpus = ChatterBotCorpusTrainer(chatbot)
     trainer_corpus.train(
-        "chatterbot.corpus.persian",
-        "chatterbot.corpus.english"
+         "chatterbot.corpus.persian",
+         "chatterbot.corpus.english"
     )
 
     trainer.train([
