@@ -67,8 +67,8 @@ h3 {
     width: 100%;
     background-color: rgb(194, 227, 224);
     position:absolute;
-	top:50px;
-	bottom:100px;
+	  top:50px;
+	  bottom:100px;
     overflow:auto;
     padding : 20px;
 }
@@ -115,7 +115,7 @@ h3 {
     font-family: Vazir;
     font-size: 13px;
     text-align: right;
-    line-height: 43px;
+    line-height: 25px;
     width : 100%;
     border-radius: 12px;
     margin-top: 8px;
@@ -128,7 +128,7 @@ h3 {
     font-family: Vazir;
     font-size: 13px;
     text-align: left;
-    line-height: 43px;
+    line-height: 25px;
     border-radius: 12px;
     width : 100%;
     margin-top: 8px;
@@ -188,7 +188,7 @@ h3 {
     width: auto;
     height: auto;
     float : left;
-    min-height: 80px;
+    min-height: 65px;
   }
 
   .talk-bubble-user {
@@ -200,7 +200,7 @@ h3 {
     background-color: lightyellow;
     float : right;
     margin-right : 10px;
-    min-height: 80px;
+    min-height: 65px;
   }
   
   .round{
@@ -230,7 +230,7 @@ h3 {
     height: 0;
     left: -20px;
     right: auto;
-    top: 38px;
+    top: 25px;
     bottom: auto;
     border: 12px solid;
     border-color: white white transparent transparent;
@@ -294,7 +294,7 @@ h3 {
     height: 0;
     left: auto;
     right: -20px;
-    top: 38px;
+    top: 25px;
     bottom: auto;
     border: 12px solid;
     border-color: lightyellow transparent transparent lightyellow;
@@ -318,6 +318,7 @@ h3 {
     padding: 1em;
     text-align: left;
     line-height: 1.5em;
+    padding-top : 1.5em;
   }
   .talktext p{
     /* remove webkit p margins */
