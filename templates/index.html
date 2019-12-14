@@ -20,7 +20,44 @@
 <body style="background-color: rgb(194, 227, 224);">
   <div id = "myframe">
     <div id="header">
-      <h1 id = "title">چت بات</h1>         
+      <div class="dropdown">
+          <ul class="dropbtn icons btn-right showLeft" onclick="showDropdown()">
+              <li></li>
+              <li></li>
+              <li></li>
+          </ul>
+          <div id="myDropdown" class="dropdown-content">
+              <a id ='hint'>راهنما</a>
+              <a href="#about">درباره</a>
+              <a href="#contact">ارتباط</a>
+          </div>
+        </div>
+      <h1 id = "title">چت بات</h1>  
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>
+            <p id="hint-explanation">با نوشتن دستورایی به فرمت زیر می تونی اطلاعات درسی مورد نیازتو بدست بیاری</p>
+            <ul id = "hint-list">
+              <li>نمره های من </li>
+                <li>نمره های درس فلان</li>
+                <li>نمره فلان در درس فلان</li>
+                <li>نام استاد درس فلان</li>
+                <li>چه خبر؟</li>
+                <li>کوییز های انجام نشده</li>
+                <li>فعالیت های نزدیک</li>
+                <li>ایمیل فلانی</li>
+                <li>درس های من</li>
+                <li>پیام های جدید در فروم</li>
+                <li>متن پیام با موضوع فلان </li>
+                <li>ساعت چنده</li>
+                <li>تاریخ امروز</li>
+            </ul>      
+          </p>
+        </div>
+      </div>       
     </div>
     <div id="chatbox">
       <div class = "row">
@@ -74,7 +111,30 @@
         </script>              
     </div>
 </div>
+<script>
+    function changeLanguage(language) {
+        var element = document.getElementById("url");
+        element.value = language;
+        element.innerHTML = language;
+    }
 
+    function showDropdown() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
 
     <script>
         function getBotResponse() {
@@ -96,8 +156,27 @@
         });
       } 
     </script>
-  </div>
-</div>
+
+  <script>
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("hint");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+    
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+
 </body>
 </html>
 
