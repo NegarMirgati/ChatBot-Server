@@ -142,7 +142,7 @@
         var rawText =  $('#textInput').data("emojioneArea").getText().trim();          
         var userHtml = '<div class = "row"><div class = "col-xs-9 col-chat"> <div class="talk-bubble-user tri-right round right-in"> <div class="talktext"> <p class = "userText">' +  rawText + '</p></div></div></div><div class = "col-xs-3 col-chat text-right"> <img src="/static/f1.png" alt="student" class="right" id = "user-avatar"></div></div>' ;
         $("#chatbox").append(userHtml);
-        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+        $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
        
         $.get("/get", { msg: rawText }).done(function(data) {
           var str = data;
@@ -152,7 +152,7 @@
           var botHtml = '<div class="row"><div class = "col-xs-3 col-chat"> <img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar"></div> <div class = "col-xs-9 col-chat"> <div class="talk-bubble-bot tri-right round left-in" style = "background-color : white;"> <div class="talktext"><p class = "botText">' + data + '</p></div></div></div></div>';
           $("#chatbox").append(botHtml);
           $("div.emojionearea-editor").data("emojioneArea").setText('');
-          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
         });
       } 
     </script>
