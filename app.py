@@ -103,17 +103,20 @@ def find_courseName(course_id):
   for x in myresult:
     return x[0]
 
-"  List Questions in each Quiz "
-def get_all_questions(quize_name):
-    mycursor = mydb.cursor()
-    st = """SELECT quiz.id, quiz.name, q.id, q.name
-          FROM mdl_quiz AS quiz
-          JOIN mdl_question AS q ON FIND_IN_SET(q.id, quiz.questions)
-          WHERE quiz.name = %%covariance%%
-          ORDER BY quiz.id ASC"""
-
-    mycursor.execute(st)
-    myresult = mycursor.fetchall()
+def has_uploaded_syllabus(course_name):
+  mycursor = mydb.cursor()
+  print('NNNNNNAAAAAAAME', course_name)
+  st = """SELECT name FROM mdl_resource AS r
+  JOIN mdl_course AS c ON c.id = r.course  
+  WHERE (c.fullname =%s) AND
+  (r.name LIKE '%Outline%' OR r.name LIKE '%outline%') """
+  courseName_ = (course_name,)
+  mycursor.execute(st, courseName_)
+  myresult = mycursor.fetchall()
+  if(len(myresult) == 0):
+    return 'برنامه درس هنوز آپلود نشده'
+  else :
+    return "برنامه درس رو می تونی تو فایل {} ببینی".format(str(myresult[0][0]))
 
 
 
@@ -444,20 +447,13 @@ def find_avatar_path(userid):
     break
   picture = find_picture(userid)
   avatar = 'static/f2.png'
-  #print(path)
-  #print(len(path))
   if picture!=0:  
     avatar='/../../../../var/moodledata/filedir/'+path[0]+path[1]+"/"+path[2]+path[3]+"/"+path
   img = cv2.imread(avatar, 1)
-  #'/../../../../var/moodledata/filedir/bb/6c/bb6c3a02c8747adcf11748bb97415fe683c0a7c0'
   path2 = 'static'
   cv2.imwrite(os.path.join(path2 , str(userid)+'.png'), img)
   cv2.waitKey(0)
 
-  # file2 = open("static/info2.txt","w")
-  # file2.write(avatar) 
-  # file2.close() 
-  #return avatar  
 
 def find_token(userid):
   mycursor = mydb.cursor()
@@ -619,6 +615,15 @@ def get_bot_response():
     email=userText
     output=add_user(userId,username,password,firstname,lastname,email)
     return output+"#"+userId
+  
+  elif "syllabus" in userText or "سیلاب" in userText or "برنامه" in userText:
+    if userText.find("'")!= -1:
+      userText = userText[userText.find("'")+1:]
+      courseName = userText[:userText.find("'")]
+      return has_uploaded_syllabus(courseName)+"#"+userId
+    else:
+      return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
+
     
     
     
