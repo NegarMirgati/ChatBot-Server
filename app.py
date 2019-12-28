@@ -63,65 +63,6 @@ def find_itemInfo2(courseid, id):
   for x in myresult:
     return x[0]
 
-# def find_gradeOfOneCourse(userId,courseName):
-#   mycursor = mydb.cursor()
-#   #st = "SELECT itemid,finalgrade FROM mdl_grade_grades WHERE userid=%s" #id,finalgrade 
-#   st = """SELECT it.finalgrade,gg.itemname
-#   FROM mdl_grade_grades it
-#   JOIN mdl_grade_items gg ON gg.id=it.itemid 
-#   JOIN mdl_course cc ON cc.id=gg.courseid
-#   WHERE it.userid=%s AND cc.fullname=%s
-#   ORDER BY gg.courseid"""
-#   userId_ = (userId,courseName)
-#   mycursor.execute(st,userId_)
-#   myresult = mycursor.fetchall()
-#   outstr = " "
-#   for x in myresult:
-#     itemName=x[1]
-#     grade=x[0]
-#     if not (itemName is None):
-#       if not (grade is None):
-#         outstr+=itemName + " is: "+str(grade)+" ."
-#       else:
-#         outstr+=itemName + " is not graded." 
-        
-#   if outstr==" ":
-#     outstr+="you don't have this course \N{expressionless face}"
-#   return outstr + "\N{smiling face with smiling eyes}" 
-      
-
-# def find_gradeOfOneCourse(userId,cn):
-#   mycursor = mydb.cursor()
-#   st = """SELECT it.finalgrade, gg.courseid,gg.itemname
-#   FROM mdl_grade_grades it
-#   JOIN mdl_grade_items gg ON gg.id=it.itemid 
-#   WHERE it.userid=%s
-#   ORDER BY gg.courseid"""
-#   userId_ = (userId,)
-#   mycursor.execute(st,userId_)
-#   myresult = mycursor.fetchall()
-#   outstr = ""
-#   name1=" "
-#   flag=False
-#   for x in myresult:
-#     courseName= find_courseName(x[1])
-#     if courseName == cn:
-#       flag =True
-#       itemName = x[2]  
-#       if not (itemName is None):
-#         if not (x[0] is None):
-#           outstr+=itemName+":"+str(x[0])+"   <br />"
-#         else:  
-#           outstr+=itemName+"<br />"+" هنوز نمره اش وارد نشده است"+"<br />"
-      
-#         #print(outstr)
-#   if outstr!="":   
-#     return ":نمره ی فعالیت های شما"+"<br />"+outstr
-#   elif flag==False:
-#     return "چنین درسی وجود نداره:("
-#   else:
-#     return "هیچ نمره ای وارد نشده است"+"\N{disappointed face}"
-
 def find_gradeOfOneCourse(userid,cn):
   outstr = ""
   courseid=find_courseId(cn)
@@ -161,6 +102,19 @@ def find_courseName(course_id):
   myresult = mycursor.fetchall()
   for x in myresult:
     return x[0]
+
+"  List Questions in each Quiz "
+def get_all_questions(quize_name):
+    mycursor = mydb.cursor()
+    st = """SELECT quiz.id, quiz.name, q.id, q.name
+          FROM mdl_quiz AS quiz
+          JOIN mdl_question AS q ON FIND_IN_SET(q.id, quiz.questions)
+          WHERE quiz.name = %%covariance%%
+          ORDER BY quiz.id ASC"""
+
+    mycursor.execute(st)
+    myresult = mycursor.fetchall()
+
 
 
 #find all grade with course name
@@ -224,16 +178,14 @@ def find_UserEmail(name):
     return x[0]
 
 def find_email(st1):
-  st2 = ""
-  count = 0
-  for x in st1:
-    if x[0].isupper():
-      st2+=x+" "
-      count+=1
-  if count==2:    
-    output = find_UserEmail(st2)
+  quoted = re.compile('"([^"]*)"')
+  print (' '.join(st1))
+  extracted = quoted.findall(' '.join(st1))
+  if len(extracted) > 0:   
+    print('ECTRACTEEEEEEED',extracted[0]) 
+    output = find_UserEmail(extracted[0])
   else:
-    output = "لطفا اول نام و نام خانوادگی مورد نظر را بزرگ تای‍‍‍‍پ کنید"  
+    output ='لطفا نام و نام خانوادگی را بین "" قرار دهید'
   if not (output is None):
     return output
   else:
@@ -290,6 +242,34 @@ def find_courseTeacher(courseName):
     return "استاد:"+"<br />"+str2 
   else:
     return "برای این درس نام هیچ استادی ثبت نشده است"+ " \N{worried face}"  
+
+def find_courseChief(courseName):
+    mycursor = mydb.cursor()
+    st="""(SELECT u.firstname,u.lastname FROM mdl_course ic 
+    JOIN mdl_context con ON con.instanceid = ic.id 
+    JOIN mdl_role_assignments ra ON con.id = ra.contextid AND con.contextlevel = 50
+    JOIN mdl_role r ON ra.roleid = r.id
+    JOIN mdl_user u ON u.id = ra.userid
+    WHERE r.id = 9 AND ic.id = %s
+    )"""
+    courseid = find_courseId(courseName)
+    if (courseid is None):
+      return "!درسی با این اسم رو شما ثبت نام نکردی"
+    id_ = (courseid,)
+    mycursor.execute(st,id_)
+    myresult = mycursor.fetchall()
+    str2=""
+    res_len = len(myresult)
+    for x in myresult:
+      if(res_len >= 2):
+        str2+=x[0]+" "+x[1]+", "
+        res_len -= 1
+      else :
+         str2+=x[0]+" "+x[1]
+    if str2!="": 
+      return "چیف تی ای درس " + str2 + "ه"
+    else:
+      return "برای این درس نام هیچ چیف تی ای ثبت نشده است"+ " \N{worried face}"  
 
 def find_UnclosedAssignment(id):
   mycursor = mydb.cursor()
@@ -590,7 +570,7 @@ def get_bot_response():
   elif "ساعت" in userText or "تاریخ" in userText:
     return emoji.emojize(" :calendar:")+" "+find_date()+"#"+userId 
   
-  elif "کویز" in userText:
+  elif "کوییز" in userText:
     return find_UncloseQuiz(userId)+"#"+userId
   
   elif "استاد" in userText: 
@@ -600,6 +580,14 @@ def get_bot_response():
       return find_courseTeacher(courseName)+"#"+userId
     else:
       return ". ''لطفا نام درس را قرار بده بین"+"#"+userId    
+
+  elif "چیف" in userText: 
+    if userText.find("'")!= -1:
+      userText = userText[userText.find("'")+1:]
+      courseName = userText[:userText.find("'")]
+      return find_courseChief(courseName)+"#"+userId
+    else:
+      return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
   
   elif "تمرین" in userText or "فعالیت" in userText:
     return find_UnclosedAssignment(userId)+"#"+userId
