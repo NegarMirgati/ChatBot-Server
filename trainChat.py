@@ -10,7 +10,8 @@ def process():
                     "Farsi Bot",
                     #storage_adapter = "chatterbot.storage.SQLStorageAdapter",
                     tie_breaking_method = "random_response",
-                    response_selection_method = get_random_response
+                    response_selection_method = get_random_response,
+                    default_response = 'متاسفم ولی متوجه نمی شم'
                     )
     trainer = ListTrainer(chatbot)
     trainer_corpus = ChatterBotCorpusTrainer(chatbot)

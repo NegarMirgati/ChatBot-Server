@@ -48,7 +48,6 @@ def find_userInfo(username):
   mycursor.execute(st,username_)
   myresult = mycursor.fetchall()
   for x in myresult:
-   #   print(x)
     return "بله شما"+"<br />"+x[0]+" " +x[1]+"<br />"+" هستیدوایمیل شما "+"<br />"+x[2]+" \N{winking face}"
     
 
@@ -108,7 +107,7 @@ def has_uploaded_syllabus(course_name):
   st = """SELECT name FROM mdl_resource AS r
   JOIN mdl_course AS c ON c.id = r.course  
   WHERE (c.fullname =%s) AND
-  (r.name LIKE '%Outline%' OR r.name LIKE '%outline%' OR r.name LIKE '%برنامه%') """
+  (LOWER(r.name) LIKE '%outline%' OR r.name LIKE '%برنامه%') """
   courseName_ = (course_name,)
   mycursor.execute(st, courseName_)
   myresult = mycursor.fetchall()
@@ -117,6 +116,38 @@ def has_uploaded_syllabus(course_name):
   else :
     return "برنامه درس رو می تونی تو فایل {} ببینی".format(str(myresult[0][0]))
 
+def has_uploaded_midterm_grades(course_name):
+  mycursor = mydb.cursor()
+  st = """SELECT name FROM mdl_resource AS r
+  JOIN mdl_course AS c ON c.id = r.course  
+  WHERE (c.fullname =%s) AND
+  ((LOWER(r.name) LIKE '%midterm%' AND LOWER(r.name) NOT LIKE '%[s]olution%' AND LOWER(r.name) NOT LIKE ' %[s]ample%') OR
+  (r.name LIKE '%میانترم%' AND r.name NOT LIKE '%پاسخ%')) """
+  courseName_ = (course_name,)
+  mycursor.execute(st, courseName_)
+  myresult = mycursor.fetchall()
+  if(len(myresult) == 0):
+    return 'فکر کنم نمرات هنوز آپلود نشده'
+  else :
+    return "نمرات میانترمو می تونی تو فایل {} ببینی".format(str(myresult[0][0]))
+
+
+def get_ungraded_assignments(userId):
+  mycursor = mydb.cursor()
+  st = """ SELECT c.fullname AS "Course", a.name AS "Assignment"
+  FROM mdl_assignment_submissions AS asb
+  JOIN mdl_assignment AS a ON a.id = asb.assignment
+  JOIN mdl_user AS u ON u.id = asb.userid
+  JOIN mdl_course AS c ON c.id = a.course
+  JOIN mdl_course_modules AS cm ON c.id = cm.course 
+  WHERE asb.grade < 0 AND cm.instance = a.id AND u.id =%s
+  AND cm.module = 1 """
+  userId_ = (userId,)
+  mycursor.execute(st,userId_)
+  myresult = mycursor.fetchall()
+  for x in myresult :
+    print(x[0], x[1])
+ 
 #find all grade with course name
 def find_all_gradesOfUser(userId):
   mycursor = mydb.cursor()
@@ -621,9 +652,17 @@ def get_bot_response():
     else:
       return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
 
-    
-    
-    
+  elif ("میانترم" in userText or "میان ترم" in userText) and ("نمره" in userText or "نمرات" in userText):
+    if userText.find("'")!= -1:
+      userText = userText[userText.find("'")+1:]
+      courseName = userText[:userText.find("'")]
+      return has_uploaded_midterm_grades(courseName)+"#"+userId
+    else:
+      return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
+  
+  elif "تصحیح نشده" in userText:
+    return get_ungraded_assignments(userId)+"#"+userId
+
   else:
     output = str(english_bot.get_response(userText))
     return output+"#"+userId
