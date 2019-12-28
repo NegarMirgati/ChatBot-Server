@@ -45,6 +45,8 @@
                 <li>نمره های درس فلان</li>
                 <li>نمره فلان در درس فلان</li>
                 <li>نام استاد درس فلان</li>
+                <li>نام چیف درس فلان</li>
+                <li>برنامه درس فلان</li>
                 <li>چه خبر؟</li>
                 <li>کوییز های انجام نشده</li>
                 <li>فعالیت های نزدیک</li>
@@ -101,7 +103,9 @@
                 useSprite: false,
                 events: {
                 keyup: function(editor, event) {
-                  if (event.which == 13) {
+                  if (event.which == 13) { 
+                  var text =  $('#textInput').data("emojioneArea").getText().trim();   
+                  if(text != "" || text.replace(/\s/g, '').length)
                     $("#buttonInput").click();  
                   }
                 }
@@ -139,7 +143,9 @@
     <script>
         function getBotResponse() {
 
-        var rawText =  $('#textInput').data("emojioneArea").getText().trim();          
+        var rawText =  $('#textInput').data("emojioneArea").getText().trim();       
+        if(rawText == "")
+          return   
         var userHtml = '<div class = "row"><div class = "col-xs-9 col-chat"> <div class="talk-bubble-user tri-right round right-in"> <div class="talktext"> <p class = "userText">' +  rawText + '</p></div></div></div><div class = "col-xs-3 col-chat text-right"> <img src="/static/f1.png" alt="student" class="right" id = "user-avatar"></div></div>' ;
         $("#chatbox").append(userHtml);
         $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
@@ -151,7 +157,7 @@
           data = str.substring(0, n);
           var botHtml = '<div class="row"><div class = "col-xs-3 col-chat"> <img src="/static/chatbot.jpg" alt="chatbot" id = "bot-avatar"></div> <div class = "col-xs-9 col-chat"> <div class="talk-bubble-bot tri-right round left-in" style = "background-color : white;"> <div class="talktext"><p class = "botText">' + data + '</p></div></div></div></div>';
           $("#chatbox").append(botHtml);
-          $("div.emojionearea-editor").data("emojioneArea").setText('');
+          $("div.emojionearea-editor").data("emojioneArea").setText("");
           $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
         });
       } 

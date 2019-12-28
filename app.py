@@ -105,11 +105,10 @@ def find_courseName(course_id):
 
 def has_uploaded_syllabus(course_name):
   mycursor = mydb.cursor()
-  print('NNNNNNAAAAAAAME', course_name)
   st = """SELECT name FROM mdl_resource AS r
   JOIN mdl_course AS c ON c.id = r.course  
   WHERE (c.fullname =%s) AND
-  (r.name LIKE '%Outline%' OR r.name LIKE '%outline%') """
+  (r.name LIKE '%Outline%' OR r.name LIKE '%outline%' OR r.name LIKE '%برنامه%') """
   courseName_ = (course_name,)
   mycursor.execute(st, courseName_)
   myresult = mycursor.fetchall()
@@ -117,8 +116,6 @@ def has_uploaded_syllabus(course_name):
     return 'برنامه درس هنوز آپلود نشده'
   else :
     return "برنامه درس رو می تونی تو فایل {} ببینی".format(str(myresult[0][0]))
-
-
 
 #find all grade with course name
 def find_all_gradesOfUser(userId):
