@@ -23,12 +23,9 @@ mydb = mysql.connector.connect(
 
 app = Flask(__name__)
 
-# english_bot = ChatBot("Persian Bot", storage_adapter="chatterbot.storage.SQLStorageAdapter")
-# trainer = ChatterBotCorpusTrainer(english_bot)
-# trainer.train("chatterbot.corpus.persian")#persian
-
-#--------------manual------------------
 english_bot =trainChat.process()
+multiple_question_state = 0
+multiple_question_parameters = {'state' : 0}
 
 def findName(id):
   mycursor = mydb.cursor()
@@ -87,10 +84,6 @@ def find_courseId(courseName):
   myresult = mycursor.fetchall()
   for x in myresult:
     return x[0]
-
-"""--------------------------------------"""
-
-
 
 """ to find grade of all items' user--------------------- """
 def find_courseName(course_id):
@@ -194,8 +187,6 @@ def find_UserCourse(id):
     st2+= x[0] + ", "
   return "این هم لیست درس های شما"+"<br />"+st2
 
-
-
 def find_UserEmail(name):
   splitname = name.split()
   mycursor = mydb.cursor()
@@ -227,6 +218,49 @@ def convertTime(timestamp):
   time = dt_object.strftime("%d-%b-%Y (%H:%M:%S.%f)")
   return time
 
+def get_quizes_names(courseName):
+  course_id = find_courseId(courseName)
+  if (course_id is None):
+    return "!درسی با این اسم رو شما ثبت نام نکردی"
+  mycursor = mydb.cursor()
+  st = """SELECT quiz.name
+  FROM mdl_quiz AS quiz
+  WHERE quiz.course = %s AND quiz.timeclose < %s
+  ORDER BY quiz.id ASC; """
+  params = (course_id, time.time())
+  mycursor.execute(st, params)
+  myresult = mycursor.fetchall()
+  if(len(myresult) >= 1) : 
+    multiple_question_parameters['courseId'] = course_id
+    multiple_question_parameters['state'] = 1
+    retval = "سوالای این کوییز هارو می تونی ببینی :‌" + "<br/> "
+    for x in myresult :
+      retval += x[0] + "<br />"
+    retval += "اسم کوییزی که میخوای رو برام تای‍پ کن."
+    return retval
+  else :
+    return "کوییزی جهت نمایش وجود نداره."
+
+def get_quizes_questions(quizName):
+  mycursor = mydb.cursor()
+  st = """ SELECT q.name, q.questiontext
+  FROM mdl_quiz AS quiz
+  JOIN mdl_quiz_slots qs on quiz.id = qs.quizid
+  JOIN mdl_question AS q on q.id = qs.questionid
+  WHERE quiz.course = %s AND quiz.timeclose < %s AND quiz.name LIKE %s;
+;
+  """
+  params = (multiple_question_parameters['courseId'], time.time(), quizName)
+  mycursor.execute(st, params)
+  myresult = mycursor.fetchall()
+  multiple_question_parameters['state'] = 0
+  if(len(myresult) >= 1) : 
+    retval = "سوالات این کوییز : " +  "<br />"
+    for x in myresult:
+      retval += x[0] + " : " + x[1] + "<br />"
+    return retval
+  else :
+    return "سوالی جهت نمایش وجود نداره."
 
 def find_UncloseQuiz(id):
   mycursor = mydb.cursor()
@@ -491,18 +525,16 @@ def find_token(userid):
   myresult = mycursor.fetchall()
   for x in myresult:
     if not (x is None):
-      #print("hello")
       return x[0]
-    #else:
   return " "  
+
 def add_user(userid,username,password,firstname,lastname,email):
   token = find_token(userid)
   if token==" ":
     return "شما اجازه دسترسی به این کار را ندارید"
 
   os.system("php webservice/demo1.php %s %s %s %s %s %s"%(username,password,firstname,lastname,email,token))
-  #out = subprocess.check_output("php webservice/demo1.php %s %s %s %s %s"%(username,password,firstname,lastname,email))
-  #result=str(out)
+
   outstr="نام کاربری:"+username+"<br />"
   outstr+="رمز عبور:"+password+"<br />"
   outstr+="نام:"+firstname+"<br />"
@@ -517,9 +549,6 @@ def home(id):
     file1 = open("info.txt","w")
     file1.write(id) 
     file1.close() 
-    
-    
-    #print(path)
     return render_template("index.html")
 
 @app.route("/get")
@@ -529,14 +558,13 @@ def get_bot_response():
   userId = file1.read() 
   file1.close()
   
-  # file2 = open("static/info2.txt","r+") 
-  # avatar = file2.read() 
-  # #print(avatar)
-  # file2.close()
-
   userText = request.args.get('msg')
-  find_avatar_path(userId)
-  if "سلام" in userText:
+  print("multiple_params", multiple_question_parameters)
+  if(multiple_question_parameters['state'] != 0):
+    if(multiple_question_parameters['state'] == 1):
+      return get_quizes_questions(userText)+"#"+userId  
+
+  elif "سلام" in userText:
     userName=findName(userId)
     output = userName+"سلام "+ "\N{grinning face}"+"\N{grinning face}"+"\N{smiling face with smiling eyes}"+"<br />"
     if int(access[int(userId)].days)>10:  
@@ -594,7 +622,7 @@ def get_bot_response():
   elif "ساعت" in userText or "تاریخ" in userText:
     return emoji.emojize(" :calendar:")+" "+find_date()+"#"+userId 
   
-  elif "کوییز" in userText:
+  elif "کوییز" in userText and 'سوال' not in userText:
     return find_UncloseQuiz(userId)+"#"+userId
   
   elif "استاد" in userText: 
@@ -662,6 +690,14 @@ def get_bot_response():
   
   elif "تصحیح نشده" in userText:
     return get_ungraded_assignments(userId)+"#"+userId
+  
+  elif "سوال" in userText and "کوییز" in userText :
+    if userText.find("'")!= -1:
+      userText = userText[userText.find("'")+1:]
+      courseName = userText[:userText.find("'")]
+      return get_quizes_names(courseName) + "#" + userId
+    else:
+      return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
 
   else:
     output = str(english_bot.get_response(userText))
