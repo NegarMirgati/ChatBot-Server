@@ -108,10 +108,10 @@
           <script type="text/javascript">
             $(document).ready(function() {
               $("#textInput").emojioneArea({
-                container: "#emoji-container",
-                hideSource: true,
-                useSprite: false,
-                dir : "rtl",
+                attributes: {
+                  dir : "rtl",
+                  autocomplete   : "on",
+                },
                 events: {
                 keyup: function(editor, event) {
                   if (event.which == 13) { 
@@ -182,6 +182,8 @@
       if (event.target == modal) {
         modal.style.display = "none";
       }
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
       for (i = 0; i < dropdowns.length; i++) {
         var openDropdown = dropdowns[i];
         if (openDropdown.classList.contains('show')) {
@@ -223,7 +225,4 @@
   </script>
 
 </body>
-</html>
-
-
 </html>
