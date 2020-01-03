@@ -27,17 +27,15 @@
               <li></li>
           </ul>
           <div id="myDropdown" class="dropdown-content">
-              <a id ='hint'>راهنما</a>
-              <a href="#about">درباره</a>
-              <a href="#contact">ارتباط</a>
+              <a id ="hint">راهنما</a>
+              <a id ="about">درباره</a>
+              <a id='contact'>ارتباط</a>
           </div>
         </div>
       <h1 id = "title">چت بات</h1>  
-      <!-- The Modal -->
       <div id="myModal" class="modal">
-        <!-- Modal content -->
         <div class="modal-content">
-          <span class="close">&times;</span>
+          <span class="close" id = "close-hint">&times;</span>
           <p>
             <p id="hint-explanation">با نوشتن دستورایی به فرمت زیر می تونی اطلاعات درسی مورد نیازتو بدست بیاری</p>
             <ul id = "hint-list">
@@ -61,7 +59,17 @@
             </ul>      
           </p>
         </div>
-      </div>       
+      </div>   
+
+      <div id="about-modal" class="modal">
+        <div class="modal-content">
+          <span class="close" id = "close-about">&times;</span>
+          <p>
+            <p id="about-content">سلام. من چت بات هستم. من برای جوابگویی سوالات درسی شما طراحی شده ام. برای آشنایی با نحوه کار با بات به راهنما مراجعه کن.</p>
+          </p>
+        </div>
+      </div>   
+
     </div>
     <div id="chatbox">
       <div class = "row">
@@ -103,6 +111,7 @@
                 container: "#emoji-container",
                 hideSource: true,
                 useSprite: false,
+                dir : "rtl",
                 events: {
                 keyup: function(editor, event) {
                   if (event.which == 13) { 
@@ -129,16 +138,7 @@
     }
 
     window.onclick = function(event) {
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
+
     }
 </script>
 
@@ -168,7 +168,7 @@
   <script>
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("hint");
-    var span = document.getElementsByClassName("close")[0];
+    var span = document.getElementById("close-hint");
 
     btn.onclick = function() {
       modal.style.display = "block";
@@ -178,11 +178,48 @@
       modal.style.display = "none";
     }
     
-    window.onclick = function(event) {
+   window.addEventListener('click', function(event){
       if (event.target == modal) {
         modal.style.display = "none";
       }
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+        }
+      }
+    });
+    
+  </script>
+
+  <script>
+    var modal1 = document.getElementById("about-modal");
+    var btn1 = document.getElementById("about");
+    var span = document.getElementById("close-about");
+
+    btn1.onclick = function() {
+      modal1.style.display = "block";
     }
+    
+    span.onclick = function() {
+      modal1.style.display = "none";
+    }
+    
+   window.addEventListener('click', function(event) {
+      if (event.target == modal1) {
+        modal1.style.display = "none";
+      }
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+              openDropdown.classList.remove('show');
+          }
+        }
+      }
+   });
   </script>
 
 </body>
