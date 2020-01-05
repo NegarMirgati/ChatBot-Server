@@ -34,7 +34,6 @@ def findName(id):
   mycursor.execute(st,id_)
   myresult = mycursor.fetchall()
   for x in myresult:
-    #print(x[0])
     return x[0]
 
 
@@ -125,21 +124,30 @@ def has_uploaded_midterm_grades(course_name):
     return "نمرات میانترمو می تونی تو فایل {} ببینی".format(str(myresult[0][0]))
 
 
-def get_ungraded_assignments(userId):
+def get_ungraded_assignments(userId, courseName):
   mycursor = mydb.cursor()
-  st = """ SELECT c.fullname AS "Course", a.name AS "Assignment"
-  FROM mdl_assignment_submissions AS asb
-  JOIN mdl_assignment AS a ON a.id = asb.assignment
+  mycursor.execute('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;')
+  st = """SELECT 
+  a.name
+  FROM mdl_assign_submission AS asb
+  JOIN mdl_assign AS a ON a.id = asb.assignment
   JOIN mdl_user AS u ON u.id = asb.userid
-  JOIN mdl_course AS c ON c.id = a.course
-  JOIN mdl_course_modules AS cm ON c.id = cm.course 
-  WHERE asb.grade < 0 AND cm.instance = a.id AND u.id =%s
-  AND cm.module = 1 """
-  userId_ = (userId,)
-  mycursor.execute(st,userId_)
+  JOIN mdl_course AS c ON c.id = a.course 
+  WHERE asb.status = "submitted" AND c.fullname =%s and u.id = %s AND NOT EXISTS (SELECT * FROM mdl_assign_grades g WHERE g.userid = u.id AND g.assignment = a.id);
+  """
+  params = (courseName, userId)
+  print(params)
+  mycursor.execute(st, params)
   myresult = mycursor.fetchall()
-  for x in myresult :
-    print(x[0], x[1])
+  if(len(myresult) == 0):
+    return "همه ی تمرین هایی که بارگزاری کرده اید نمره دهی شده اند."
+  else :
+    retval = "اسامی تمرین هایی که بارگزاری کردی ولی نمره اشون هنوز نیومده : " + "<br />"
+    for x in myresult :
+      retval += x[0] + "<br/>"
+      print(x[0])
+    return retval
+  mycursor.close()
  
 #find all grade with course name
 def find_all_gradesOfUser(userId):
@@ -641,7 +649,15 @@ def get_bot_response():
     else:
       return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
   
-  elif "تمرین" in userText or "فعالیت" in userText:
+  elif "تصحیح نشده" in userText:
+    if userText.find("'")!= -1:
+      userText = userText[userText.find("'")+1:]
+      courseName = userText[:userText.find("'")]
+      return get_ungraded_assignments(userId, courseName)+"#"+userId
+    else:
+      return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
+  
+  elif "تمرین" in userText or "فعالیت" in userText and "تصحیح" not in userText:
     return find_UnclosedAssignment(userId)+"#"+userId
 
   elif "چه خبر" in userText or "رویداد" in userText:
@@ -687,10 +703,7 @@ def get_bot_response():
       return has_uploaded_midterm_grades(courseName)+"#"+userId
     else:
       return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
-  
-  elif "تصحیح نشده" in userText:
-    return get_ungraded_assignments(userId)+"#"+userId
-  
+    
   elif "سوال" in userText and "کوییز" in userText :
     if userText.find("'")!= -1:
       userText = userText[userText.find("'")+1:]
