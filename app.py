@@ -270,6 +270,24 @@ def get_quizes_questions(quizName):
   else :
     return "سوالی جهت نمایش وجود نداره."
 
+def get_assignment_grader(userId, courseName, assignName):
+  st = '''SELECT grader.firstname, grader.lastname, grader.email from
+  mdl_user as grader where grader.id IN (
+  SELECT ag.grader FROM
+  mdl_assign AS a  
+  JOIN mdl_assign_grades AS ag on ag.assignment = a.id
+  JOIN mdl_course AS c ON c.id = a.course 
+  JOIN mdl_user AS u ON u.id = ag.userid
+  WHERE u.id = %s and c.fullname = %s AND a.name = %s);'''
+  params = (userId, courseName, assignName)
+  mycursor = mydb.cursor()
+  mycursor.execute(st, params)
+  myresult = mycursor.fetchall()
+  if(len(myresult) == 0):
+    return 'اطلاعاتی جهت نمایش وجود نداره.'
+  else :
+    return 'مصحح این تمرین تو' + myresult[0][0] + ' ' + myresult[0][1] + 'ه' + "<br />" + 'آدرس ایمیل : ' + myresult[0][2]
+
 def find_UncloseQuiz(id):
   mycursor = mydb.cursor()
   st="SELECT name,timeclose,course FROM mdl_quiz WHERE timeclose>%s AND course IN(SELECT id FROM mdl_course  WHERE id IN (SELECT courseid FROM  mdl_enrol WHERE id IN(SELECT enrolid FROM mdl_user_enrolments WHERE userid=%s))) ORDER BY course"
@@ -656,6 +674,21 @@ def get_bot_response():
       return get_ungraded_assignments(userId, courseName)+"#"+userId
     else:
       return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
+
+  elif "مصحح" in userText and "تمرین" in userText :
+    st1=""
+    if userText.find("(")!= -1:
+      userText = userText[userText.find("(")+1:]
+      itemName = userText[:userText.find(")")]
+      if userText.find("'")!= -1: 
+        userText = userText[userText.find("'")+1:]
+        courseName = userText[:userText.find("'")]
+        st1 = get_assignment_grader(userId, courseName, itemName)
+      else:
+        st1= "لطفا با این فرمت تایپ کن <br /> 'course'مصحح (تمرین)در "  
+    else:
+      st1= "لطفا با این فرمت تایپ کن <br /> 'course'مصحح (تمرین)در "  
+    return st1+"#"+userId   
   
   elif "تمرین" in userText or "فعالیت" in userText and "تصحیح" not in userText:
     return find_UnclosedAssignment(userId)+"#"+userId
