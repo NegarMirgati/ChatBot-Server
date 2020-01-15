@@ -56,7 +56,7 @@
       <div class="col-6">
         <p>From:</p>
             <textarea id="demo1">
-  Lorem ipsum dolor 😍 sit amet, consectetur 👻 adipiscing elit, 🖐 sed do eiusmod tempor ☔ incididunt ut labore et dolore magna aliqua 🐬.
+  Lorem ipsum dolor 😍 
   </textarea>
       </div>
       <div class="col-6">
@@ -71,7 +71,10 @@
       $("#demo1").emojioneArea({
         container: "#container",
         hideSource: false,
-        useSprite: false
+        useSprite: false,
+         attributes: {
+                  dir : "rtl"
+                }
       });
     });
   </script>

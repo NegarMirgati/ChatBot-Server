@@ -1,4 +1,4 @@
-@import "Fonts/vazir.css"; 
+@import "../fonts/vazir.css"; 
 
 html {
     overflow : hidden;
@@ -86,12 +86,6 @@ h3 {
     border-bottom: 3px solid #009688;
     font-family: Vazir;
     font-size: 17px;
-    text-align: right;
-}
-
-.emojionearea-editor{
-  text-align: right;
-
 }
 
 #buttonInput{
@@ -160,21 +154,7 @@ h3 {
     width: 100%;
 }
 
-.container img {
-    float: left;
-    max-width: 50px;
-    width: 100%;
-    margin-right: 5px;
-    border-radius: 50%;
-    background-color: #ddd;
-    
-  }
-  .container img.right {
-    float: right;
-    margin-left: 5px;
-    margin-right:0;
-  }
-  #myframe{
+#myframe{
       background-color: rgb(194, 227, 224);
       font-family: Vazir;
       width : 100%;

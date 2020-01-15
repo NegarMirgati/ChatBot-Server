@@ -286,7 +286,7 @@ def get_assignment_grader(userId, courseName, assignName):
   if(len(myresult) == 0):
     return 'اطلاعاتی جهت نمایش وجود نداره.'
   else :
-    return 'مصحح این تمرین تو' + myresult[0][0] + ' ' + myresult[0][1] + 'ه' + "<br />" + 'آدرس ایمیل : ' + myresult[0][2]
+    return 'مصحح این تمرین' + myresult[0][0] + ' ' + myresult[0][1] + 'ه' + "<br />" + 'آدرس ایمیل : ' + myresult[0][2]
 
 def find_UncloseQuiz(id):
   mycursor = mydb.cursor()

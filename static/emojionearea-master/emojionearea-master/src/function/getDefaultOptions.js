@@ -13,7 +13,7 @@ function($, emojione, getEmojioneVersion, detectVersion, getSupportMode) {
 
         var defaultOptions = {
             attributes: {
-                dir               : "ltr",
+                dir               : "rtl",
                 spellcheck        : false,
                 autocomplete      : "off",
                 autocorrect       : "off",
