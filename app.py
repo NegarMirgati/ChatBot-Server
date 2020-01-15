@@ -16,8 +16,8 @@ import cv2
 
 mydb = mysql.connector.connect(
   host="localhost",
-  user="negar",
-  passwd="nm36912",
+  user="moodledude",
+  passwd="passwordformoodledude",
   database="moodle"
 )
 
@@ -753,4 +753,4 @@ def get_bot_response():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
