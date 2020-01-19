@@ -34,19 +34,6 @@ $user1->firstname = $argv[3];
 $user1->lastname = $argv[4];
 $user1->email = $argv[5];
 
-
-//$user1->mailformat = 0;
-//$preferencename1 = 'preference1';
-//$preferencename2 = 'preference2';
-//$user1->preferences = array(
- //   array('type' => $preferencename1, 'value' => 'preferencevalue1'),
-  //  array('type' => $preferencename2, 'value' => 'preferencevalue2'));
-// $user2 = new stdClass();
-// $user2->username = 'testusername2';
-// $user2->password = '1375Zahra@';
-// $user2->firstname = 'testfirstname2';
-// $user2->lastname = 'testlastname2';
-// $user2->email = 'testemail2@moodle.com';
 $users = array($user1);
 $params = array('users' => $users);
 

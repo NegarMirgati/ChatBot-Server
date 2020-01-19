@@ -16,8 +16,8 @@ import cv2
 
 mydb = mysql.connector.connect(
   host="localhost",
-  user="moodledude",
-  passwd="passwordformoodledude",
+  user="negar",
+  passwd="nm36912",
   database="moodle"
 )
 
@@ -25,6 +25,7 @@ app = Flask(__name__)
 
 english_bot =trainChat.process()
 multiple_question_state = 0
+webservice_name = "mirgati_test"
 multiple_question_parameters = {'state' : 0}
 
 def findName(id):
@@ -60,17 +61,21 @@ def find_itemInfo2(courseid, id):
 
 def find_gradeOfOneCourse(userid,cn):
   outstr = ""
+  token = find_token(userid)
+  if token==" ":
+    return "شما اجازه دسترسی به این کار را ندارید"
+
   courseid=find_courseId(cn)
   if (courseid is None):
     return "چنین درسی وجود نداره:("
-  os.system("php webservice/demo.php %s %s"%(courseid,userid))
-  out = subprocess.check_output("php webservice/demo.php %s %s"%(courseid,userid), shell=True)
+  os.system("php webservice/demo.php %s %s %s"%(courseid, userid, token))
+  out = subprocess.check_output("php webservice/demo.php %s %s %s"%(courseid,userid, token), shell=True)
   result=str(out)
+  print("RESUUUUUUUUUULT", out)
   
   first=2
   for m in re.finditer(',', result):
     outstr+= result[first:m.start()]+"<br />"
-    #print(result[first:m.start()])
     first=m.start()+1
   return ":نمره ی فعالیت های شما"+"<br />"+outstr  
 
@@ -545,9 +550,11 @@ def find_avatar_path(userid):
 
 def find_token(userid):
   mycursor = mydb.cursor()
-  st="""SELECT token FROM mdl_external_tokens WHERE userid=%s"""
-  id_ =(userid,)
-  mycursor.execute(st,id_)
+  st="""SELECT token FROM mdl_external_tokens AS et
+  JOIN mdl_external_services AS es ON es.id = et.externalserviceid
+  WHERE userid=%s and es.name = %s ;"""
+  id_ =(userid, webservice_name)
+  mycursor.execute(st, id_)
   myresult = mycursor.fetchall()
   for x in myresult:
     if not (x is None):
@@ -753,4 +760,4 @@ def get_bot_response():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run()
