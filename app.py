@@ -70,9 +70,7 @@ def find_gradeOfOneCourse(userid,cn):
     return "چنین درسی وجود نداره:("
   os.system("php webservice/demo.php %s %s %s"%(courseid, userid, token))
   out = subprocess.check_output("php webservice/demo.php %s %s %s"%(courseid,userid, token), shell=True)
-  result=str(out)
-  print("RESUUUUUUUUUULT", out)
-  
+  result= str(out, 'utf-8')
   first=2
   for m in re.finditer(',', result):
     outstr+= result[first:m.start()]+"<br />"
@@ -381,7 +379,7 @@ def find_UnclosedAssignment(id):
     courseName = find_courseName(x[2])
     os.system("php webservice/demo5.php %s %s"%(x[3],id))
     out = subprocess.check_output("php webservice/demo5.php %s %s"%(x[3],id), shell=True)
-    result=str(out)
+    result = str(out)
     if courseName != name1:
       name1 = courseName
       str1+=" در درس'"+courseName+"'"+"<br />"
@@ -402,7 +400,8 @@ def find_UnclosedAssignment(id):
 def find_event(id):
   st1 = find_UncloseQuiz(id)
   st2 = find_UnclosedAssignment(id)
-  return st1+st2
+  str3 = get_unread_messages_count(id)
+  return st1+st2+str3
 
 def find_date():
   currentDT = datetime.now()
@@ -499,7 +498,20 @@ def find_itemGrade(userId,itemName,courseName):
       return "هنوزنمره اش وارد نشده"+" \N{upside-down face}"
     else:
         return "فعالیتی با این اسم وجود نداره:(" 
-  return "فعالیتی با این اسم وجود نداره:("       
+  return "فعالیتی با این اسم وجود نداره:("   
+
+def get_unread_messages_count(userId): 
+  token = find_token(userId)
+  if token==" ":
+    return "شما اجازه دسترسی به این کار را ندارید" 
+  out = subprocess.check_output("php webservice/demo8.php %s %s"%(userId, token), shell=True)
+  result = str(out.decode())
+  if(result == "0"):
+    return "‍پیام جدیدی ندارید"
+  else:
+    return  "شما " + result  + "!پیام جدید داری" 
+   
+  
 
 def find_timeLeave(timestamp):
   currentDT = datetime.now()
@@ -751,7 +763,6 @@ def get_bot_response():
       return get_quizes_names(courseName) + "#" + userId
     else:
       return ". ''لطفا نام درس را قرار بده بین"+"#"+userId  
-
   else:
     output = str(english_bot.get_response(userText))
     return output+"#"+userId

@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: text/html; charset=UTF-8');
+$file = '/tmp/json-file';
 
 $domainname = 'http://localhost/moodle';
 $functionname = 'gradereport_user_get_grade_items';
@@ -7,10 +9,15 @@ $functionname = 'gradereport_user_get_grade_items';
 $restformat = 'json'; 
 $token = $argv[3];
 $params = array('courseid' => $argv[1],'userid'=> $argv[2],'groupid'=> 0);
-
+ini_set('default_charset', 'utf-8');
+function hex2str($hex) {
+  $str = '';
+  for($i=0;$i<strlen($hex);$i+=2) $str .= chr(hexdec(substr($hex,$i,2)));
+  return $str;
+}
 
 /// REST CALL
-header('Content-Type: text/plain');
+
 $serverurl = $domainname . '/webservice/rest/server.php'. '?wstoken=' . $token . '&wsfunction='.$functionname;
 require_once('curl.php');
 $curl = new curl;
@@ -20,14 +27,12 @@ $resp = $curl->post($serverurl . $restformat, $params);
 
 $Book=json_decode($resp);
 for($i=0;$i<count($Book->usergrades[0]->gradeitems);$i++){
+  if($Book->usergrades[0]->gradeitems[$i]->itemname == "")
+    return;
   print_r($Book->usergrades[0]->gradeitems[$i]->itemname);
   print_r(":");
   print_r($Book->usergrades[0]->gradeitems[$i]->gradeformatted);
   print_r(",");
-  
-  
-  
 }
-
 
 
