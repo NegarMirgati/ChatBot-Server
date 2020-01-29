@@ -438,3 +438,44 @@ h3 {
 #hint-explanation, #about-content{
   margin-right: 20px;
 }
+
+
+#floatbtn{
+  display: inline-block;
+  border-radius: 50%;
+}
+
+
+#floatbtn:hover .bottom:after {
+  border-top: 0.5em solid #1080db;
+  border-right: 0.5em solid #1080db;
+}
+
+
+.bottom {
+  display: inline-block;
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  margin-left: 0.75em;
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  left: 220px;
+  z-index: 99;
+  cursor: pointer;
+}
+
+.bottom:after {
+  content: '';
+	display: inline-block;
+  margin-top: 0.6em;
+  width: 1.4em;
+  height: 1.4em;
+  border-top: 0.5em solid #333;
+  border-right: 0.5em solid #333;
+  -moz-transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+}
+

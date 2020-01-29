@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en-us">
 <head>
-  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="/static/css/normalize.min.css" media="screen">
   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
   <script src="/static/js/jquery-3.4.1.min.js"></script>
@@ -126,6 +125,11 @@
         </script>              
     </div>
 </div>
+
+<a id = "floatbtn">
+  <span class="bottom" id = "scrollBtn" onclick="topFunction()"></span>
+</a>
+
 <script>
     function changeLanguage(language) {
         var element = document.getElementById("url");
@@ -137,9 +141,6 @@
         document.getElementById("myDropdown").classList.toggle("show");
     }
 
-    window.onclick = function(event) {
-
-    }
 </script>
 
     <script>
@@ -225,6 +226,24 @@
       }
    });
   </script>
+  <script>
+    var mybutton = document.getElementById("scrollBtn");
+    $('#chatbox').on('scroll', function() {
+      var scrollTop = $(this).scrollTop();
+      if (scrollTop + $(this).innerHeight() < this.scrollHeight) {
+        console.log('salam');
+        mybutton.style.display = "block";
+      }
+      else{
+        mybutton.style.display = "none";
+      }
+    });
+    function topFunction() {
+      var objDiv = document.getElementById("chatbox");
+      objDiv.scrollTop = objDiv.scrollHeight;
+      document.getElementById("scrollBtn").display = "None";
+    }
+</script>
 
 </body>
 </html>
