@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MyScript
+Comment=MyScript
+Icon=gnome-info
+Exec=python3 /home/negar/Desktop/Farsi/app.py &
+Terminal=false
+Type=Application
+Categories=
+
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=0
+
