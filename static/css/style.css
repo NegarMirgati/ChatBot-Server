@@ -16,6 +16,8 @@ body {
     font-family: Vazir; 
     height: 600px;
     width : 100%;
+    scrollbar-color: #0ae #f1f1f1 ;
+    scrollbar-width: thin;
 }
 
 #chat-container{
@@ -71,6 +73,7 @@ h3 {
 	  bottom:100px;
     overflow:auto;
     padding : 20px;
+    scrollbar-width: thin;
 }
 
 #userInput {
