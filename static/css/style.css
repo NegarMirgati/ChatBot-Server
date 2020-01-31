@@ -114,6 +114,7 @@ h3 {
     border-radius: 12px;
     margin-top: 8px;
     background-color: lightyellow;
+    direction: rtl;
 }
 
 
@@ -127,6 +128,7 @@ h3 {
     width : 100%;
     margin-top: 8px;
     background-color: rgb(255, 255, 255);
+    direction: rtl;
 }
 
 #bot-avatar{
@@ -296,7 +298,7 @@ h3 {
   /* talk bubble contents */
   .talktext{
     padding: 1em;
-    text-align: left;
+    text-align: right;
     line-height: 1.5em;
     padding-top : 1.5em;
   }
