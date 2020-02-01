@@ -16,6 +16,7 @@ import cv2
 from waitress import serve
 
 
+
 mydb = mysql.connector.connect(
   host="localhost",
   user="negar",
@@ -47,7 +48,7 @@ def find_userInfo(username):
   mycursor.execute(st,username_)
   myresult = mycursor.fetchall()
   for x in myresult:
-    return "بله شما"+"<br />"+x[0]+" " +x[1]+"<br />"+" هستیدوایمیل شما "+"<br />"+x[2]+" \N{winking face}"
+    return "بله شما"+"<br />"+x[0]+" " +x[1]+"<br />"+" هستید و ایمیل شما "+"<br />"+x[2]+" \N{winking face}"
     
 
 
@@ -73,11 +74,11 @@ def find_gradeOfOneCourse(userid,cn):
   os.system("php webservice/demo.php %s %s %s"%(courseid, userid, token))
   out = subprocess.check_output("php webservice/demo.php %s %s %s"%(courseid,userid, token), shell=True)
   result= str(out, 'utf-8')
-  first=2
+  first= 0
   for m in re.finditer(',', result):
-    outstr+= result[first:m.start()]+"<br />"
+    outstr+= result[first:m.start()] + "<br />"
     first=m.start()+1
-  return ":نمره ی فعالیت های شما"+"<br />"+outstr  
+  return "نمره ی فعالیت های شما : " + "<br />" + outstr  
 
   
 def find_courseId(courseName):
@@ -147,7 +148,7 @@ def get_ungraded_assignments(userId, courseName):
   if(len(myresult) == 0):
     return "همه ی تمرین هایی که بارگزاری کرده اید نمره دهی شده اند."
   else :
-    retval = "اسامی تمرین هایی که بارگزاری کردی ولی نمره اشون هنوز نیومده : " + "<br />"
+    retval = "اسامی تمرین هایی که بارگزاری کردی ولی نمره اشون هنوز نیومده:" + "<br />"
     for x in myresult :
       retval += x[0] + "<br/>"
       print(x[0])
@@ -182,12 +183,11 @@ def find_all_gradesOfUser(userId):
       else:  
         outstr+=itemName+" وارد نشده است"
       outstr+="<br />"
-      #print(outstr)
   if outstr!="":   
     return outstr
   else:
     return "\N{disappointed face}هیچ نمره ای ثبت نشده است!"  
-"""-----------------------------------------"""
+
 
 def find_UserCourse(id):
   mycursor = mydb.cursor()
@@ -195,10 +195,9 @@ def find_UserCourse(id):
   id_ = (id,)
   mycursor.execute(st,id_)
   myresult = mycursor.fetchall()
-  st2 = " "
-  for x in myresult:
-    st2+= x[0] + ", "
-  return "این هم لیست درس های شما"+"<br />"+st2
+  row = [item[0] for item in myresult]
+  my_string = ','.join(row)
+  return "این هم لیست درس های شما"+"<br />" + my_string
 
 def find_UserEmail(name):
   splitname = name.split()
@@ -234,7 +233,7 @@ def convertTime(timestamp):
 def get_quizes_names(courseName):
   course_id = find_courseId(courseName)
   if (course_id is None):
-    return "!درسی با این اسم رو شما ثبت نام نکردی"
+    return "شما درسی با این نام ثبت نام نکرده اید."
   mycursor = mydb.cursor()
   st = """SELECT quiz.name
   FROM mdl_quiz AS quiz
@@ -308,10 +307,10 @@ def find_UncloseQuiz(id):
     if courseName !=name1:
       name1=courseName
       str2+="در '"+ courseName+"'<br /> "
-      str2+="کویزها با تاریخ بسته شدن اشان اینگونه است"+"<br />"
+      str2+="کوییزها با تاریخ بسته شدن اشان اینگونه است"+"<br />"
     str2+=x[0]+" ,closed time:"+closedTime+"<br />"
   if str2=="":
-    return "کویز انجام نشده ای ندارید "+"<br />"+"\N{smiling face with smiling eyes}\N{smiling face with smiling eyes}"+"<br />"
+    return "کوییز انجام نشده ای ندارید "+"<br />"+"\N{smiling face with smiling eyes}\N{smiling face with smiling eyes}"+"<br />"
   else:
     return str1+str2
 
@@ -327,7 +326,7 @@ def find_courseTeacher(courseName):
   )"""
   courseid = find_courseId(courseName)
   if (courseid is None):
-    return "!درسی با این اسم رو شما ثبت نام نکردی"
+    return "شما درسی با این نام ثبت نام نکرده اید."
   id_ = (courseid,)
   mycursor.execute(st,id_)
   myresult = mycursor.fetchall()
@@ -337,7 +336,7 @@ def find_courseTeacher(courseName):
   if str2!="": 
     return "استاد:"+"<br />"+str2 
   else:
-    return "برای این درس نام هیچ استادی ثبت نشده است"+ " \N{worried face}"  
+    return "برای این درس نام هیچ استادی ثبت نشده است" + " \N{worried face}"  
 
 def find_courseChief(courseName):
     mycursor = mydb.cursor()
@@ -350,7 +349,7 @@ def find_courseChief(courseName):
     )"""
     courseid = find_courseId(courseName)
     if (courseid is None):
-      return "!درسی با این اسم رو شما ثبت نام نکردی"
+      return "شما درسی با این نام ثبت نام نکرده اید."
     id_ = (courseid,)
     mycursor.execute(st,id_)
     myresult = mycursor.fetchall()
@@ -379,19 +378,21 @@ def find_UnclosedAssignment(id):
   for x in myresult:
     closedTime= convertTime(x[1])
     courseName = find_courseName(x[2])
-    os.system("php webservice/demo5.php %s %s"%(x[3],id))
-    out = subprocess.check_output("php webservice/demo5.php %s %s"%(x[3],id), shell=True)
+    token = find_token(id)
+    if token==" ":
+      return "شما اجازه دسترسی به این کار را ندارید" 
+    print(x[3], id, token)
+    out = subprocess.check_output("php webservice/demo5.php %s %s %s"%(x[3], id, token), shell=True)
     result = str(out)
     if courseName != name1:
       name1 = courseName
-      str1+=" در درس'"+courseName+"'"+"<br />"
-      str1+="فعالیت ها با تاریخ بسته شدن اشان این گونه است:"+" \N{worried face}"+"<br />"
+      str1+=" در درس " + courseName +"<br />"
+      str1+="فعالیت ها با تاریخ بسته شدن اشان این گونه است:" + "<br />"
     str1+=x[0]+": "+closedTime+"<br />"+"<br />"
     first=2
-    str1+=":تعداد شرکت کنندگان"
+    str1+="تعداد شرکت کنندگان: "
     for m in re.finditer(',', result):
       str1+= result[first:m.start()]+"<br />"  
-      #print(result[first:m.start()])
       first=m.start()+1
     str1+="تعداد کسانی که این تکلیف را انجام دادند:"
     str1+=result[first:]+"<br />"
@@ -613,18 +614,18 @@ def get_bot_response():
 
   elif "سلام" in userText:
     userName=findName(userId)
-    output = userName+"سلام "+ "\N{grinning face}"+"\N{grinning face}"+"\N{smiling face with smiling eyes}"+"<br />"
+    output = "سلام " + userName +  " \N{grinning face}"+"\N{grinning face}"+"\N{smiling face with smiling eyes}"+"<br />"
     if int(access[int(userId)].days)>10:  
-      output+="چقدر دیر به دیر میایی.دلم برات تنگ شده بود"+"<br />"+str(access[int(userId)].days)+"<br />"+"روزه که نبودی"
+      output+="چقدر دیر به دیر لاگین می کنی.دلم برات تنگ شده بود"+"<br />"+str(access[int(userId)].days)+"<br />"+"روزه که نبودی"
     elif int(access[int(userId)].days) <1:
-     output+=" چقد خوشحالم زود به زود میایی"
+     output+="چقد خوشحالم زود به زود لاگین می کنی"
     return output+"#"+userId
   
   elif "تشکر" in userText:
-    return "خواهش می کنم:)"
+    return "خواهش می کنم" + " \N{smiling face with smiling eyes}" +  "#" + userId
   
   elif "چطوری"in userText or "حالت چه طوره" in userText or "خوبی" in userText:
-    return  emoji.emojize(" :rose:")+"ممنونم"+"#"+userId
+    return "ممنونم" + emoji.emojize(" :rose:") + "#" + userId
 
   elif "می شناسی" in userText and "من" in userText:
     userName=findName(userId)

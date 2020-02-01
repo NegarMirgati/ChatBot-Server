@@ -1,33 +1,11 @@
 <?php
 
-
-// This file is NOT a part of Moodle - http://moodle.org/
-//
-// This client for Moodle 2 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-
-/**
- * REST client for Moodle 2
- * Return JSON or XML format
- *
- * @authorr Jerome Mouneyrac
- */
-
-/// SETUP - NEED TO BE CHANGED
-$token = '4e90ca89f1ebbcfccd5ea54696165671';
+$token = $argv[3];
 $domainname = 'http://localhost/moodle';
 $functionname = 'mod_assign_get_submission_status';
 
 // REST RETURNED VALUES FORMAT
-$restformat = 'json'; //Also possible in Moodle 2.2 and later: 'json'
-                     //Setting it to 'json' will fail all calls on earlier Moodle version
-
-//////// moodle_user_create_users ////////
-
-/// PARAMETERS - NEED TO BE CHANGED IF YOU CALL A DIFFERENT FUNCTION
+$restformat = 'json'; 
 
 $params = array('assignid'=>$argv[1],'userid'=>$argv[2]);
 
